@@ -8,6 +8,9 @@ namespace SpendingAnalysis.Core.Models
 {
     public class Category
     {
+
+        // Публичный конструктор без параметров для JsonSerializer
+        public Category() { }
         private Category(Guid id, string name, OperationdTypeEnum operType, Guid userId)
         {
             Id = id;

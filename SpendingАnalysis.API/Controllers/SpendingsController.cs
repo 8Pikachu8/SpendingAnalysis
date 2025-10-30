@@ -1,10 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SpendingAnalysis.API.Contracts;
 using SpendingAnalysis.Core.Abstractions;
 using SpendingAnalysis.Core.Models;
 using SpendingАnalysis.Contracts;
+using System.Security.Claims;
 
 namespace SpendingАnalysis.Controllers
 {
@@ -65,6 +65,21 @@ namespace SpendingАnalysis.Controllers
                 DeleteSpending(ids);
 
             return Ok(SpId);
+        }
+
+        [HttpGet("GetGroupedSpendings")]
+        public async Task<ActionResult<List<GroupingSpendingResponce>>> GetGroupedSpendings()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            var userId = Guid.Parse(userIdClaim.Value);
+
+            List<GroupingSpending> groupSpendings = await _spendingAnalysisService.GetGroupedSpendings(userId);
+            var res = groupSpendings.OrderByDescending(x=>x.DateSpending).Select(x => new GroupingSpendingResponce(x.DateSpending.ToString("dd MMMM, ddd"), (int)x.SpendingSum, x.Spendings));
+
+            return Ok(res);
         }
     }
 }

@@ -11,15 +11,30 @@ namespace SpendingAnalysis.Aplication.Services
     public class CategoriesService : ICategoriesService
     {
         private ICategoriesRepository _categoriesRepository;
+        private readonly ICacheService _cache;
 
-        public CategoriesService(ICategoriesRepository categoriesRepository)
+        public CategoriesService(ICategoriesRepository categoriesRepository, ICacheService cache)
         {
             _categoriesRepository = categoriesRepository;
+            _cache = cache;
         }
+
+        private string GetUserCategoriesCacheKey(Guid userId) => $"user:{userId}:categories";
 
         public async Task<List<Category>> GetCategories(Guid userId)
         {
-            return await _categoriesRepository.Get(userId);
+            // Сначала пробуем получить из кэша
+            var cached = await _cache.GetAsync<List<Category>>(GetUserCategoriesCacheKey(userId));
+            if (cached != null) return cached;
+
+
+            var categories = await _categoriesRepository.Get(userId);
+
+            // Сохраняем в кэш на 10 минут
+            await _cache.SetAsync(GetUserCategoriesCacheKey(userId), categories, TimeSpan.FromMinutes(10));
+
+            return categories;
+
         }
 
         public async Task<Guid> AddCategory(Category category)

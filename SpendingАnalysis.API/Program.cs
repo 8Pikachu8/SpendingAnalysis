@@ -1,16 +1,24 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SpendingAnalysis.API.Cache;
 using SpendingAnalysis.Aplication.Services;
 using SpendingAnalysis.Core.Abstractions;
 using SpendingAnalysis.DataAccess;
 using SpendingAnalysis.DataAccess.Repositories;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 // ? Добавляем логирование сразу после создания builder
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+// Добавляем Redis кэш
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379"; // хост и порт Redis
+    options.InstanceName = "MyApp_";          // префикс для ключей
+});
 
 // ?? Настраиваем JWT
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_123456789";
@@ -60,6 +68,7 @@ builder.Services.AddScoped<ISpendingAnalysisService, SpendingAnalysisService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -81,6 +90,5 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-//app.MapMethods("{*path}", new[] { "OPTIONS" }, () => Results.Ok()).AllowAnonymous();
 
 app.Run();
