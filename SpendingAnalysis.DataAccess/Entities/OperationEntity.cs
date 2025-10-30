@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpendingAnalysis.DataAccess.Entities
 {
-    public class SpendingEntity
+    public class OperationEntity
     {
         public Guid Id { get; set; }
 
@@ -15,5 +15,14 @@ namespace SpendingAnalysis.DataAccess.Entities
         public decimal Amount { get; set; }
 
         public DateTime Date { get; set; }
+
+        // Новый внешний ключ
+        public Guid UserId { get; set; }// FK
+
+        public UserEntity User { get; set; }// навигационное свойство
+
+        public Guid CategoryId { get; set; }
+
+        public CategoryEntity Category { get; set; } = null!;
     }
 }

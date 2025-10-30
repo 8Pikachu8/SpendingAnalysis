@@ -12,9 +12,9 @@ namespace SpendingAnalysis.Aplication.Services
             _spendingRepository = spendingRepository;
         }
 
-        public async Task<List<Spending>> GetAllSpendings()
+        public async Task<List<Spending>> GetSpendingsByUserId(Guid userId)
         {
-            return await _spendingRepository.Get();
+            return await _spendingRepository.GetByUserId(userId);
         }
 
         public async Task<Guid> AddSpending(Spending spending)
@@ -22,9 +22,9 @@ namespace SpendingAnalysis.Aplication.Services
             return await _spendingRepository.Add(spending);
         }
 
-        public async Task<Guid> DeleteSpending(Guid id)
+        public async Task<Guid[]> DeleteSpending(Guid[] ids)
         {
-            return await _spendingRepository.Delete(id);
+            return await _spendingRepository.Delete(ids);
         }
 
         public async Task<Guid> UpdateSpending(Guid id, string description, decimal amount, DateTime date)

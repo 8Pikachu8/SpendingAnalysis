@@ -9,9 +9,9 @@ using SpendingAnalysis.DataAccess.Entities;
 
 namespace SpendingAnalysis.DataAccess.Configuretions
 {
-    public class SpendingConfiguration : IEntityTypeConfiguration<SpendingEntity>
+    public class SpendingConfiguration : IEntityTypeConfiguration<OperationEntity>
     {
-        public void Configure(EntityTypeBuilder<SpendingEntity> builder)
+        public void Configure(EntityTypeBuilder<OperationEntity> builder)
         {
             builder.HasKey(s => s.Id);
 

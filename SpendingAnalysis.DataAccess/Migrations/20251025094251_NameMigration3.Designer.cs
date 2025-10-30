@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SpendingAnalysis.DataAccess;
@@ -11,9 +12,11 @@ using SpendingAnalysis.DataAccess;
 namespace SpendingAnalysis.DataAccess.Migrations
 {
     [DbContext(typeof(SpendinAnalysisDbContext))]
-    partial class SpendinAnalysisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251025094251_NameMigration3")]
+    partial class NameMigration3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

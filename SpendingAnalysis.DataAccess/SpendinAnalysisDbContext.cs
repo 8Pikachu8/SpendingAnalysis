@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SpendingAnalysis.DataAccess.Entities;
 
 namespace SpendingAnalysis.DataAccess
@@ -15,6 +10,12 @@ namespace SpendingAnalysis.DataAccess
 
         }
 
-        public DbSet<SpendingEntity> Spendings { get; set; }
+        public DbSet<OperationEntity> Operations { get; set; }
+
+        public DbSet<UserEntity> Users { get; set; }
+
+        public DbSet<OperationTypeEntity> OperationTypes { get; set; }
+
+        public DbSet<CategoryEntity> Categories { get; set; }
     }
 }

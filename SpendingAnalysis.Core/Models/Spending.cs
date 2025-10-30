@@ -8,12 +8,14 @@ namespace SpendingAnalysis.Core.Models
 {
     public class Spending
     {
-        private Spending(Guid id, string description, decimal amount, DateTime date)
+        private Spending(Guid id, string description, decimal amount, DateTime date, Guid userId, Guid categoryId)
         {
             Id = id;
             Description = description;
             Amount = amount;
             Date = date;
+            UserId = userId;
+            CategoryId = categoryId;
         }
 
         public Guid Id { get; }
@@ -24,7 +26,11 @@ namespace SpendingAnalysis.Core.Models
 
         public DateTime Date { get; }
 
-        public static (Spending Spending, string Error) Create(Guid guid, string description, decimal amount, DateTime date)
+        public Guid UserId { get; }
+
+        public Guid CategoryId { get; }
+
+        public static (Spending Spending, string Error) Create(Guid guid, string description, decimal amount, DateTime date, Guid userId, Guid categoryId)
         {
             var errror = string.Empty;
             if (string.IsNullOrWhiteSpace(description))
@@ -40,7 +46,7 @@ namespace SpendingAnalysis.Core.Models
                 errror = "Date cannot be in the future.";
             }
 
-            var spending = new Spending(guid, description, amount, date);
+            var spending = new Spending(guid, description, amount, date, userId, categoryId);
             return (spending, errror);
         }
     }
